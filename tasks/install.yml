@@ -14,16 +14,16 @@
   become: yes
   when: ansible_distribution == 'Archlinux'
 
-- name: Check if is raspberry
-  shell: "uname -r"
-  register: uname
+# - name: Check if is raspberry
+#   shell: "uname -r"
+#   register: uname
 
-- name: Install raspberry specific packages
-  package:
-    name:
-      - linux-modules-extra-raspi
-    state: latest
-  when: uname.stdout | regex_search('raspi')
+# - name: Install raspberry specific packages
+#   package:
+#     name:
+#       - linux-modules-extra-raspi
+#     state: latest
+#   when: uname.stdout | regex_search('raspi')
 
 - name: Install microk8s
   become: yes
