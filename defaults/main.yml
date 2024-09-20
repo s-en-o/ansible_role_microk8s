@@ -39,6 +39,7 @@ microk8s_plugins:
   kata: false                             # A secure container runtime with lightweight virtual machines
   openebs: false                          # openebs storage
   openfaas: false                         # serverless
+  argocd: true                            # Declarative GitOps CD for Kubernetes
 
 helm3_repositories:
   - name: stable
