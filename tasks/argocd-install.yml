@@ -1,0 +1,36 @@
+---
+- name: Set up ArgoCD
+  hosts: kubernetes_master
+  tasks:
+    - name: Set up ArgoCD
+      environment:
+        KUBECONFIG: "{{ kubeconfig | default('~/.kube/config') }}"
+      block:
+        - name: Install Python Kubernetes module
+          become: true
+          ansible.builtin.pip:
+            name: kubernetes
+            state: present
+
+        - name: Create ArgoCD namespace
+          kubernetes.core.k8s:
+            state: present
+            definition:
+              apiVersion: v1
+              kind: Namespace
+              metadata:
+                name: argocd
+                labels:
+                  name: argocd
+
+        - name: Download ArgoCD manifest
+          ansible.builtin.get_url:
+            url: https://raw.githubusercontent.com/argoproj/argo-cd/v2.7.2/manifests/install.yaml
+            dest: /tmp/argocd-install.yaml
+            mode: '0644'
+
+        - name: Install ArgoCD
+          kubernetes.core.k8s:
+            state: present
+            namespace: argocd
+            src: /tmp/argocd-install.yaml
